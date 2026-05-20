@@ -17,5 +17,6 @@ namespace Core.Interfaces
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);
         Task<bool> SaveAllAsync();
+        Task<bool> ExistsAsync(int id);
     }
 }

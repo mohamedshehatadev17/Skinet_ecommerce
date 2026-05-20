@@ -46,7 +46,10 @@ namespace Infrastructure.Repositories
         {
            return await _context.SaveChangesAsync()>0;
         }
-
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _context.Set<T>().AnyAsync(e => e.Id == id);
+        }
         public async Task UpdateAsync(T entity)
         {
             _context.Set<T>().Attach(entity);
