@@ -21,12 +21,23 @@ public class ProductsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand = null, string? type = null,string? sort = null)
     {
-        var spec = new ProductSpecification(brand, type);
+        var spec = new ProductSpecification(brand, type,sort);
         var products = await _repository.ListAsync(spec);
         return Ok(products);
     }
     [HttpGet("brands")]
-  
+    public async Task<ActionResult<IReadOnlyList<string>>> GetProductBrands()
+    {
+        var spec = new BrandListSpecification();
+        return Ok(await _repository.ListAsync(spec));
+    }
+    [HttpGet("types")]
+    public async Task<ActionResult<IReadOnlyList<string>>> GetProductTypes()
+    {
+        var spec = new TypeListSpecification();
+        return Ok(await _repository.ListAsync(spec));
+    }
+
     [HttpGet("{id:int}")] // api/products/2
     public async Task<ActionResult<Product>> GetProduct(int id)
     {

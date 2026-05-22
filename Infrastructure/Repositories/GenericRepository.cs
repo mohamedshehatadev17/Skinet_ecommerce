@@ -55,9 +55,22 @@ namespace Infrastructure.Repositories
             _context.Set<T>().Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
         }
+        public async Task<TResult?> GetEntityWithSpecAsync<TResult>(ISpecification<T, TResult> spec)
+        {
+            return await ApplySpecification(spec).FirstOrDefaultAsync();
+        }
+
+        public async Task<IReadOnlyList<TResult>> ListAsync<TResult>(ISpecification<T, TResult> spec)
+        {
+            return await ApplySpecification(spec).ToListAsync();
+        }
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
             return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
+        }
+        private IQueryable<TResult> ApplySpecification<TResult>(ISpecification<T, TResult> spec)
+        {
+            return SpecificationEvaluator<T>.GetQuery<T, TResult>(_context.Set<T>().AsQueryable(), spec);
         }
     }
 }

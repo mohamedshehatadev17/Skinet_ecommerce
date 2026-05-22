@@ -13,12 +13,29 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria, Expressio
 
     public Expression<Func<T, object>>? OrderByDescending { get; private set; }
 
-    public void AddOrderBy(Expression<Func<T, object>> orderByExpression)
+    public bool IsDistinct { get; private set; }
+
+    public List<Expression<Func<T, object>>>? Includes => throw new NotImplementedException();
+
+    protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
     {
         OrderBy = orderByExpression;
     }
-    public void AddOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression)
+    protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression)
     {
         OrderByDescending = orderByDescendingExpression;
     }
+    protected void ApplyDistinct()
+    {
+        IsDistinct = true;
+    }
+}
+public class BaseSpecification<T, TResult>(Expression<Func<T, bool>>? criteria) : BaseSpecification<T>(criteria), ISpecification<T, TResult>
+{
+    public BaseSpecification() : this(null) { }
+    public Expression<Func<T, TResult>>? Select { get; private set; }
+    protected void AddSelect(Expression<Func<T, TResult>> selectExpression)
+    {
+        Select = selectExpression;
+    } 
 }
