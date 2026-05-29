@@ -19,9 +19,9 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand = null, string? type = null,string? sort = null)
+    public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts([FromQuery] ProductSpecParams specParams)
     {
-        var spec = new ProductSpecification(brand, type,sort);
+        var spec = new ProductSpecification(specParams);
         var products = await _repository.ListAsync(spec);
         return Ok(products);
     }
