@@ -17,6 +17,7 @@ namespace Core.Interfaces
         int Skip { get; }
         bool IsPagingEnabled { get; }
         List<Expression<Func<T,object>>>? Includes { get; }
+        IQueryable<T> ApplyCriteria(IQueryable<T> query);
     }
     public interface ISpecification<T,TResult>:ISpecification<T>
     {

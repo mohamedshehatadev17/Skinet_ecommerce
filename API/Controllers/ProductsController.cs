@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using API.RequestHelpers;
+using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Infrastructure.Data;
@@ -23,7 +24,9 @@ public class ProductsController : ControllerBase
     {
         var spec = new ProductSpecification(specParams);
         var products = await _repository.ListAsync(spec);
-        return Ok(products);
+        var count = products.Count();
+        var paginatedProducts = new Pagination<Product>(products, specParams.PageIndex, specParams.PageSize,count);
+        return Ok(paginatedProducts);
     }
     [HttpGet("brands")]
     public async Task<ActionResult<IReadOnlyList<string>>> GetProductBrands()
